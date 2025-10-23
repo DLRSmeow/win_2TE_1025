@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>破鸟的生日祝福</title>
+    <style>
+        body{ 		
+	    background:url('https://files.catbox.moe/46m3qb.jpg') no-repeat center center fixed;     
+            background-size: cover; 
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+	.text-container{
+		background: rgba(30,40,60,0.8);
+   	 	padding: 10px 40px;
+  	 	border-radius:15px;
+    		box-shadow:
+			0 0 0 1px rgba(64,192,224,0.3),
+			0 8px 25px rgba(0,20,40,0.6);
+    		backdrop-filter: blur(5px);
+   		border: 1px solid rgba(64,192,224,0.4);
+    		max-width: 80%;
+		outline: 1px solid rgba(255, 255, 255, 0.15);
+    		outline-offset: 2px; 
+
+}
+        .title {
+            color: #ffd166;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow:
+		0 0 10px rgba(255,209,102,0.5),
+		0 0 20px rgba(255,209,102,0.3);
+
+        }
+
+        .enter-btn {
+            background: linear-gradient(45deg, #3498db,#2ecc71);
+            color: #f0f4ff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 8px 22px rgba(52,152,219,0.6);
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(46,204,113,0.6);
+	    background:linear-gradient(45deg,#2ecc71,#3498db);
+        }
+
+        .hint {
+            margin-top: 20px;
+            font-size: 1em;
+	    color:#8ef5da;
+            opacity: 0.9;
+  	    
+}
+    </style>
+</head>
+<body>
+	<div class="text-container">
+    		<h1 class="title">Happy Birthday</h1>
+    		<button class="enter-btn" onclick="openCake()">🎁天天开心</button>
+    		<p class="hint">点击按钮看看吧 我们有东西想给你</p >
+       </div>
+ 
+</script>
+
+    <script>
+        function openCake() {
+            // 跳转到蛋糕页面
+            window.location.href = "cake.html";
+        }
+    </script>
+</body>
+</html>

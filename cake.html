@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生日蛋糕</title>
+    <style>
+        body {
+            
+	    background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 蛋糕容器  */
+        .cake-container {
+            position: relative;
+	    top:25px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cake-container:hover {
+            transform: scale(1.05);
+        }
+
+        .cake-base {
+            width: 210px;     	    
+	    height: 80px;
+ 	    background: linear-gradient(135deg, #a8dadc,#83c5be);    	    border-radius: 10px 10px 0 0;
+    	    position: relative;
+    	    box-shadow: 
+            0 8px 25px rgba(168,218,220,0.3),
+            inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+
+        .cake-top {
+             width: 180px;
+   	     height: 70px;
+  	     background: linear-gradient(135deg, #83c5be,#57cc99); 
+   	     border-radius: 8px 8px 0 0;
+    	     position: relative;
+             top: -25px;
+             box-shadow: 
+        	inset 0 2px 4px rgba(255,255,255,0.4),
+        0 4px 12px rgba(87,204,153,0.2);
+        }
+
+        .candle {
+            width: 6px;
+            height: 30px;
+            background: #ffd166;
+            position: relative;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .flame {
+            width: 12px;
+            height: 20px;
+            background: #ff9e00;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 0.8s infinite alternate;
+            box-shadow: 0 0 15px #ff9e00;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+        }
+	/*框子*/
+	.cake-frame {
+    	background: rgba(200, 230, 255, 0.5); 
+   	 padding: 70px 60px;
+	//margin-top:-20px;
+  	  border: none;
+  	  box-shadow: 
+  	        0 0 0 1px rgba(150, 200, 255, 0.2), 
+       	 	0 0 30px rgba(100, 180, 255, 0.3),  
+        	0 0 60px rgba(80, 160, 255, 0.15); 
+ 	   	backdrop-filter: blur(10px);
+	    display: inline-block;
+ 	   margin-bottom: -20px;
+}
+        /* 弹窗 */
+        .memory-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background:#d5ebee;
+            color: #223a70;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 80%;
+            text-align: center;
+            animation: popIn 0.5s ease;
+	    max-height: 70vh; /* 限制最大高度 */
+    	    //overflow-y: auto; /* 允许垂直滚动 */
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .memory-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .memory-text {
+	    text-align:left;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 15px 0;
+	    white-space:pre-line;
+	    color:#0d0015;
+	    max-height: 300px; /* 文字区域也可滚动 */
+    	    overflow-y: auto;
+        }
+
+        .close-btn {
+            background:#d6e9ca;
+            color:#549688;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .message {
+            margin-top: 40px;
+            text-align: center;
+            max-width: 300px;
+        }
+	.avatar-corner {
+    position: absolute;
+    width: 50px;   /* 变小 */
+    height: 50px;  /* 变小 */
+    border-radius: 50%;
+    border: 2px solid rgba(120, 200, 255, 0.6);
+    background-size: cover;
+    background-position: center;
+    z-index: 15;
+    
+    /* 🎇 呼吸效果 */
+    animation: breathe 3s ease-in-out infinite alternate;
+    box-shadow: 
+        0 0 10px rgba(100, 180, 255, 0.5),
+        inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+/* 呼吸动画 */
+@keyframes breathe {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(100, 180, 255, 0.5);
+        border-color: rgba(120, 200, 255, 0.6);
+    }
+    100% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(100, 200, 255, 0.8);
+        border-color: rgba(160, 220, 255, 0.9);
+    }
+}
+
+/* 四角定位 */
+.avatar-tl { top: 10px; left: 10px; }
+.avatar-tr { top: 10px; right: 10px; }
+.avatar-bl { bottom: 10px; left: 10px; }
+.avatar-br { bottom: 10px; right: 10px; }
+	h1 {
+            font-size: 1.2em;
+            margin-bottom: 0px;
+            color: #c2e9fb;
+        }
+
+        p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            opacity: 0.8;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+	 		animation: gentleWave 4s ease-in-out infinite;
+}
+	@keyframes gentleWave {
+    0%, 100% { 
+        border-radius: 60% 40% 50% 50% / 30px 30px 5px 5px;
+    }
+    50% { 
+        border-radius: 40% 60% 50% 50% / 25px 35px 5px 5px;
+    }
+}
+
+}
+    </style>
+</head>
+<body>
+	<audio id="bgMusic" autoplay loop style="display: none;">
+    <source src="https://music.163.com/song/media/outer/url?id=2748399235.mp3" type="audio/mpeg">
+</audio>
+    <!-- 蛋糕 -->
+<div class="cake-frame">
+    <!-- 四角头像 -->
+        <div class="avatar-corner avatar-tl" style="background-image: url('https://files.catbox.moe/dmqecw.png'); background-size: cover; border: 3px solid red;"></div>
+    <div class="avatar-corner avatar-tr" style="background-image: url('https://files.catbox.moe/h0acri.jpg'); background-size: cover; border: 3px solid blue;"></div>
+    <div class="avatar-corner avatar-bl" style="background-image: url('https://files.catbox.moe/01s16i.jpg'); background-size: cover; border: 3px solid green;"></div>
+    <div class="avatar-corner avatar-br" style="background-image: url('https://files.catbox.moe/zsl4um.png'); background-size: cover; border: 3px solid yellow;"></div>
+    
+        <!-- 蛋糕容器 -->
+    <div class="cake-container" onclick="cutCake()">
+        <div class="cake-base" id="cakeBase">
+            <div class="cake-top" id="cakeTop">
+                <div class="wave-cream"></div>
+                <div class="candle">
+                    <div class="flame"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    <!-- 弹窗 -->
+    <div class="memory-popup" id="memoryPopup">
+        <h3>🎉 生日快乐！</h3>
+        <div id="memoryContent">
+            <!-- 回忆内容 -->
+        </div>
+        <button class="close-btn" onclick="closeMemory()">吃完这块蛋糕啦再切一个不</button>
+    </div>
+    
+    <!-- 祝福语 -->
+    <div class="message">
+        <h1>生日快乐破鸟🎂！</h1>
+        <p>点击蛋糕可以试着切蛋糕捏</p >
+	<p>点击网页任意位置播放音乐呀 声音记得调小喲</p>
+    </div>
+
+    <script>
+        // 创建星星背景
+        function createStars() {
+            const starsContainer = document.body;
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 回忆内容
+        const memories = [
+            {
+                type: 'text',
+                content: '祝福语1'
+            },
+            {
+                type: 'text', 
+                content:    
+	`（为了安全起见，看的时候一定要三心二意，眼观六路，耳听八方哈，时间不够可以直接跳到第三段）
+我最大的愿望，嗯吖，很朴实 只是希望你能够安全看完蛋糕和我们四个所有的话
+之前我抱着侥幸心理把你拉进裙以及前面n次企鹅骚扰……导致我不清楚这次铤而走险的做法是否明智，但那天正好是周六，有没有可能是天助咱们呢
+	破鸟，我曾经觉得，我没有多花点时间跟你说话聊天是最大的遗憾
+可实际上，我在和小菜讨论问题的时候才第一次叫你破鸟，我当时却没有意识到
+我早就知道你是以前的名字，却没有去深挖这些，我只沉浸在一时的欢乐当中
+我才发现我在空闲的时候常常会想到你，所以我让自己忙碌起来，当然本身就挺忙碌，就算有空也不能让自己闲下来，我相信你也在做同样的事情❤❤❤
+还有，虽然我不知道你具体因为什么而产生过度贬低自己的行为，但如果是某些人说的，那么请你从各方面想想，这个人本身值得你这样去想或者留下这种回忆吗
+我尽量避开雷点，但是经历会影响人的行为，阴阳差错好和不好的都会有，你可以掂量掂量这件事情对你是否真的有帮助，如果你觉得这件事情对你只产生了负面影响或者影响了你自己做事的话，你看看这样是否值得？毕竟，这些再怎么样也都是人定义的
+最后，生日快乐😜😜😜	`       
+	    },
+            {
+                type: 'image',
+                content: 'https://files.catbox.moe/tmt7hi.png' // 图片链接
+            },
+            {
+                type: 'text',
+                content: '祝福语3'
+            }
+        ];
+	// 四位网友的头像链接
+	const avatarUrls = [
+    'https://files.catbox.moe/dmqecw.png',
+    'https://files.catbox.moe/h0acri.jpg', 
+    'https://files.catbox.moe/01s16i.jpg',
+    'https://files.catbox.moe/zsl4um.png'
+];
+
+	// 页面加载时固定分配头像
+window.onload = function() {
+    document.querySelector('.avatar-tl').innerHTML = 
+        `< img src="${avatarUrls[0]}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    document.querySelector('.avatar-tr').innerHTML = 
+        `< img src="${avatarUrls[1]}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    document.querySelector('.avatar-bl').innerHTML = 
+        `< img src="${avatarUrls[2]}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    document.querySelector('.avatar-br').innerHTML = 
+        `< img src="${avatarUrls[3]}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    
+    // 可选：错落淡入效果
+    const avatars = document.querySelectorAll('.avatar-corner');
+    avatars.forEach((avatar, index) => {
+        avatar.style.opacity = '0';
+        setTimeout(() => {
+            avatar.style.opacity = '1';
+            avatar.style.transition = 'opacity 0.8s ease';
+        }, index * 400);
+    });
+};
+        // 切蛋糕函数
+        function cutCake() {
+            const cakeBase = document.getElementById('cakeBase');
+            const cakeTop = document.getElementById('cakeTop');
+            const memoryPopup = document.getElementById('memoryPopup');
+            const memoryContent = document.getElementById('memoryContent');
+            
+            // 蛋糕切
+            cakeBase.style.transform = 'scale(0.9)';
+            cakeBase.style.opacity = '0.7';
+            cakeTop.style.transform = 'translateY(-10px)';
+            
+            // 随机选择回忆
+            const randomMemory = memories[Math.floor(Math.random() * memories.length)];
+            
+            // 根据类型显示内容
+            if (randomMemory.type === 'text') {
+                memoryContent.innerHTML = `<div class="memory-text">${randomMemory.content}</div>`;
+            } else if (randomMemory.type === 'image') {
+                memoryContent.innerHTML = `<img src="${randomMemory.content}" alt="我们的回忆" class="memory-image">`;
+            }
+            
+            // 显示弹窗
+            memoryPopup.style.display = 'block';
+
+         //   placeRandomAvatars();
+
+                 }
+
+        // 关闭弹窗
+        function closeMemory() {
+            document.getElementById('memoryPopup').style.display = 'none';
+            
+            // 重置状态
+            const cakeBase = document.getElementById('cakeBase');
+            const cakeTop = document.getElementById('cakeTop');
+            cakeBase.style.transform = 'scale(1)';
+            cakeBase.style.opacity = '1';
+            cakeTop.style.transform = 'translateY(0)';
+        }
+
+        createStars();
+	
+// 解决自动播放限制
+document.addEventListener('click', function() {
+    const music = document.getElementById('bgMusic');
+    if (music.paused) {
+        music.volume = 0.3; // 音量30%，避免吓人
+        music.play().then(() => {
+            console.log('音乐开始播放！');
+        }).catch(e => {
+            console.log('播放失败:', e);
+        });
+    }
+});
+
+// 也可以提示用户点击
+window.onload = function() {
+    console.log('点击页面任意位置开始播放音乐~');
+};
+    </script>
+</body>
+</html>
